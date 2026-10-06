@@ -1,0 +1,33 @@
+{
+  "slug": "hubib-academy",
+  "title": "Hubib Academy",
+  "client": "Hubib",
+  "category": "Plataforma",
+  "type": "Plataforma de cursos · Web3",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end", "Motion"],
+  "stack": ["React", "TypeScript", "Tailwind CSS", "GSAP", "TanStack Query", "i18next"],
+  "tagline": "Aprender dentro do ecossistema",
+  "summary": "Plataforma de cursos da Hubib, onde o aluno compra, assiste e conclui cursos usando o saldo e os pontos da carteira Hubib. Tem marketplace, player de aulas, sequência de estudos e certificados.",
+  "overview": "A Hubib Academy é o braço educacional do ecossistema Hubib: cursos próprios (Hubib Originals) e de criadores parceiros, num marketplace integrado à Hubib Wallet. O desafio era manter a estética premium e escura da marca numa plataforma grande, com área do aluno, área do criador e checkout com saldo, pontos ou cripto. Na área do aluno entraram a home com carrossel de originais e continuar assistindo, o player com módulos e materiais, o calendário de sequência de estudos e todo o fluxo de conclusão, do popup animado à página do certificado com download em PDF.",
+  "highlights": [
+    "Player de aulas com módulos, materiais de apoio, comentários e progresso por aula",
+    "Sequência de estudos com calendário mensal de atividades",
+    "Popup de conclusão de curso com entrada coreografada em GSAP",
+    "Página do certificado com animação de entrada e exportação em PDF",
+    "Marketplace com lançamentos em contagem regressiva e checkout com saldo, Hub Points ou cripto",
+    "Interface em quatro idiomas e login integrado à Hubib Wallet"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Home do aluno com Hubib Originals e continuar assistindo" },
+    { "file": "shot-1.webp", "caption": "Marketplace com próximos lançamentos e produtos populares" },
+    { "file": "shot-2.webp", "caption": "Player de aula com trilha de módulos" },
+    { "file": "shot-3.webp", "caption": "Mural de certificados conquistados" },
+    { "file": "shot-4.webp", "caption": "Certificado de conclusão pronto para resgatar" },
+    { "file": "mobile-1.webp", "caption": "Home no celular" },
+    { "file": "mobile-2.webp", "caption": "Calendário de sequência de estudos no celular" }
+  ],
+  "url": null,
+  "accent": "#FFB700",
+  "notes": "Tudo atrás de login com backend próprio. Gerei um build do código atual apontando a API para um servidor mock local (porta 6308) e injetei um token falso no localStorage; nenhuma requisição saiu para a API real (o script de analytics Insider foi bloqueado). Cursos, progresso, saldo, sequência e o aluno 'Marina Costa' são fictícios, montados com as artes Hubib que já estão em public/img do projeto. O mural de certificados usa os MOCK_CERTIFICATES do próprio código, mas troquei na captura as capas que mostravam marcas e pessoas reais de terceiros (Primo Rico, Thiago Nigro, livros) por artes Hubib do projeto. A assinatura 'Undefined' no certificado é o placeholder do próprio projeto (assinatura_mock.png). Escondi o botão flutuante DEV_Test. Projeto de equipe (vários autores no git); entre os commits do Pedro estão o popup de conclusão, a página e o mural de certificados e o curso mock local. URL pública não confirmada: o certificado cita academy.hubib.com/verify."
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "hubib-app",
+  "title": "Hubib",
+  "client": "Hubib",
+  "category": "Aplicativo",
+  "type": "Conta digital · Cripto e previsões",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end"],
+  "stack": ["React", "TypeScript", "Tailwind CSS", "TanStack Query", "Framer Motion", "i18next"],
+  "tagline": "Conta cripto que paga você",
+  "summary": "App da Hubib que junta conta digital, carteira cripto, cartões e mercados de previsão num só lugar. Dá pra depositar via Pix ou cripto, converter moedas, pagar com QR Code e ainda acumular Hub Points no caminho.",
+  "overview": "A Hubib precisava de um app que fosse ao mesmo tempo banco digital, carteira de criptomoedas e porta de entrada para os mercados de previsão da marca. O app nasce mobile-first, roda dentro do aplicativo nativo via WebView e ganha um layout próprio no desktop, com sidebar, dashboard e evolução do saldo. Por cima da parte financeira entra uma camada de engajamento com Hub Points, check-in diário, missões, vídeos que rendem pontos e programa de afiliados. Tudo traduzido em português, inglês, espanhol e francês.",
+  "highlights": [
+    "Carteira multi-conta com subcontas e saldos em BTC, ETH, SOL, USDT, USDC e BRL",
+    "Depósito e saque via Pix ou cripto, conversão entre moedas e transferências internas",
+    "Pagamentos e cobranças com QR Code (Hub QR)",
+    "Mercados de previsão com carteira própria, categorias, favoritos e mercados rápidos com gráfico ao vivo",
+    "Cartões Hubib com loja de cartões e verificação de identidade integrada",
+    "Hub Points e gamificação: check-in diário, missões, assista e ganhe e árvore de afiliados"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Início no desktop · saldo, evolução dos últimos 30 dias, cartão e ações rápidas" },
+    { "file": "shot-1.webp", "caption": "Previsões · mercados por categoria com chances e multiplicadores" },
+    { "file": "shot-2.webp", "caption": "Meus cartões · cartão Imperial vinculado à conta principal" },
+    { "file": "shot-3.webp", "caption": "Gamificação · sequência de check-in, rendimento do mês e missões" },
+    { "file": "shot-4.webp", "caption": "Meu saldo · saldo fiat e cripto somando todas as contas" },
+    { "file": "mobile-1.webp", "caption": "Início no celular · cartão, saldo e atalhos" },
+    { "file": "mobile-2.webp", "caption": "Previsões no celular · carteira de previsões e mercados" },
+    { "file": "mobile-3.webp", "caption": "Extrato · Pix, conversões, QR Code e transferências" },
+    { "file": "mobile-4.webp", "caption": "Hubib Points · pontos disponíveis, bloqueados e histórico" }
+  ],
+  "url": "https://app.hubib.com",
+  "accent": "#FFB600",
+  "notes": "O app exige login, então todas as telas foram capturadas com sessão falsa (JWT fictício no localStorage) e todas as chamadas de API interceptadas no puppeteer, respondendo JSON de exemplo no formato que o código espera. Usuário, saldos, transações, cartão, pontos e mercados de previsão são inventados (usuário 'Lucas Andrade', lucas.andrade@exemplo.com). O build foi feito numa pasta temporária apontando as APIs para hosts .mock, então nada falou com servidor real. As imagens de capa dos mercados vêm dos mocks da landing lp-prediction (hubib/projetos/lp-prediction/public/img/mocks), evitando as que mostram pessoas reais. Escondi via CSS o botão flutuante de 'Assistir vídeo e ganhar HUBS' (cobria o cartão no mobile) e os toasts. A tela de detalhe do mercado foi descartada porque o gráfico é ao vivo (janela de 10 s) e fica vazio com dados estáticos. O repositório tem vários autores (PedroTrindade e Nexus somam cerca de 390 dos ~1900 commits), então vale confirmar os papéis. A URL é a citada no código para links de indicação (app.hubib.com)."
+}

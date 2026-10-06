@@ -1,0 +1,33 @@
+{
+  "slug": "ama-token",
+  "title": "AMA Token",
+  "client": "AMA Token",
+  "category": "Plataforma",
+  "type": "Plataforma web · Web3",
+  "year": "2025",
+  "roles": ["UI/UX Design", "Front-end"],
+  "stack": ["React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Framer Motion", "i18next"],
+  "tagline": "Token verde, carteira completa",
+  "summary": "Painel web do AMA Token, um token cripto com pegada de sustentabilidade. O usuário compra AMA, deposita e saca em cripto ou PIX, acompanha suas carteiras e indica amigos.",
+  "overview": "O AMA Token precisava de uma área do investidor que juntasse compra do token, movimentação de saldo e programa de indicação num lugar só. A interface segue a identidade da marca, com verde de floresta, detalhes em dourado e fotos da natureza no login. Foram construídas as telas de visão geral, compra com etapas de confirmação, depósito e saque em cripto ou PIX, carteiras por rede, histórico com filtros e árvore de afiliados, todas com versão mobile própria e tradução em três idiomas.",
+  "highlights": [
+    "Compra de AMA em etapas: valor, confirmação, processamento e resultado",
+    "Depósito e saque por cripto (escolha de moeda e rede) ou PIX com QR Code",
+    "Calculadora no painel que converte ETH, BTC ou BRL em AMA",
+    "Histórico com busca, filtros por tipo, status e período, e comprovante em PDF para baixar ou compartilhar",
+    "Árvore de afiliados navegável por níveis com link de indicação",
+    "Interface em português, inglês e espanhol, com layout mobile dedicado"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Visão geral com saldo, cotação e calculadora de token" },
+    { "file": "shot-1.webp", "caption": "Compra de AMA com conversão em tempo real" },
+    { "file": "shot-2.webp", "caption": "Carteiras por rede e lista de ativos" },
+    { "file": "shot-3.webp", "caption": "Histórico de transações com filtros" },
+    { "file": "shot-4.webp", "caption": "Login com a identidade de sustentabilidade da marca" },
+    { "file": "mobile-1.webp", "caption": "Visão geral no celular" },
+    { "file": "mobile-2.webp", "caption": "Carteiras vinculadas no celular" }
+  ],
+  "url": null,
+  "accent": "#238806",
+  "notes": "Projeto só de front-end: todos os saldos, transações e afiliados são dados mockados dentro do próprio código, sem login real (o botão Entrar só navega). O dist/ do projeto tinha imagens quebradas (caminho 'public/assets/...' no build antigo), então gerei um build novo do código atual numa pasta temporária. Cor secundária da marca: dourado #FBBD23. Nenhuma URL pública encontrada."
+}

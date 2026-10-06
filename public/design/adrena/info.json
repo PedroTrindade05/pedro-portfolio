@@ -1,0 +1,34 @@
+{
+  "slug": "adrena",
+  "title": "Mídia kit Adrena",
+  "client": "Adrena · Luxury & Sports Cars",
+  "category": "Mídia kit",
+  "type": "Mídia kit de marca",
+  "year": "2026",
+  "roles": ["Design gráfico", "Direção de arte", "Mockups de aplicação"],
+  "tools": ["Canva"],
+  "tagline": "Esportivos de luxo, marca afiada",
+  "summary": "Mídia kit da Adrena, loja de carros de luxo e esportivos. A marca aparece numa capa conceitual e em nove aplicações, da fachada do showroom ao uniforme.",
+  "overview": "A Adrena trabalha com carros de luxo e esportivos, e o mídia kit mostra como a marca se comporta fora da tela. Abre com uma capa de clima automotivo: fibra de carbono, linhas de luz vermelhas, o símbolo em 3D metálico e um superesportivo em primeiro plano. Depois vêm páginas inteiras de aplicação, uma por peça: fachada, uniformes, bonés, canecas e porta-placa. Tudo em preto, vermelho e prata, com respiro de sobra para o logo trabalhar sozinho.",
+  "highlights": [
+    "Capa com o símbolo em 3D metálico, fibra de carbono, linhas de luz vermelhas e assinatura Luxury & Sports Cars",
+    "Fachada do showroom com o símbolo em letra-caixa vermelha e o logotipo em prata",
+    "Uniformes em versão clara e escura: polo preta, camisa social branca e camiseta, com o logo bordado",
+    "Brindes e acessórios: bonés preto e branco, canecas preta e branca e porta-placa em metal escovado",
+    "Logo testado em fundo claro e escuro, com o logotipo alternando entre prata e grafite"
+  ],
+  "pieces": [
+    { "file": "page-01.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Capa" },
+    { "file": "page-02.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Fachada do showroom" },
+    { "file": "page-03.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Polo preta bordada" },
+    { "file": "page-04.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Camisa social branca" },
+    { "file": "page-05.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Camiseta preta" },
+    { "file": "page-06.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Boné preto" },
+    { "file": "page-07.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Boné branco" },
+    { "file": "page-08.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Caneca preta" },
+    { "file": "page-09.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Caneca branca" },
+    { "file": "page-10.webp", "format": "página", "w": 2000, "h": 2982, "caption": "Porta-placa" }
+  ],
+  "palette": ["#060505", "#171516", "#c20d0d", "#bfc0c0"],
+  "notes": "PDF exportado do Canva (10 páginas de 1125x1677 pt, sem texto selecionável, tudo imagem). Páginas renderizadas em 2000x2982 (retrato, ~2:3). cover.webp é a página 1 em 1600x2385 e thumb.webp a mesma em 800x1193; para moldura 16:10 use object-fit: cover com object-position: 50% 20% para enquadrar símbolo, logotipo e tagline. As páginas 2 a 10 parecem mockups fotorrealistas compostos/gerados digitalmente, então trate como aplicações da marca e não como fotos de produção real. As páginas 6, 7 e 10 mostram logos de terceiros nos carros (Lamborghini, Ferrari, BMW M). O metadado Author do PDF traz outro nome (provavelmente a conta do Canva): vale confirmar com o Pedro os créditos e se ele criou o logo ou só o mídia kit. O arquivo de origem se chama 'midia kit adrena (vermelho)', o que sugere outras variações de cor."
+}

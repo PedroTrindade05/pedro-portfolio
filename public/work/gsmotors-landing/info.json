@@ -1,0 +1,33 @@
+{
+  "slug": "gsmotors-landing",
+  "title": "GS Motors Multimarcas",
+  "client": "GS Motors Multimarcas",
+  "category": "Landing page",
+  "type": "Landing page · 3D interativo",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end", "Motion Design", "3D / WebGL"],
+  "stack": ["React", "TypeScript", "Three.js · React Three Fiber", "GSAP", "Lenis", "Tailwind"],
+  "tagline": "Seminovos com cara de cinema",
+  "summary": "Landing page da GS Motors Multimarcas, loja de seminovos em Assis/SP, com uma rodovia noturna em WebGL no topo, rolagem cinematográfica e o estoque real da loja com filtros, galeria e simulador de financiamento.",
+  "overview": "A loja já tinha um site em WordPress, mas precisava de uma vitrine à altura do Instagram, no preto, branco e vermelho do logotipo. O desafio foi juntar impacto visual (cena 3D, animações presas à rolagem) com uma página leve e útil para quem quer comprar carro. O estoque é puxado da Store API do WooCommerce no momento do build, então cada deploy reflete os anúncios do site, e toda conversa termina no WhatsApp com a mensagem já pronta.",
+  "highlights": [
+    "Hero com rodovia procedural em shaders próprios: segure o clique e o velocímetro sobe até 280 km/h",
+    "Vitrine horizontal fixada na rolagem com os 6 veículos de maior valor do estoque",
+    "Estoque com filtros por tipo, marca, busca e ordenação, animados com GSAP Flip, e modal com galeria por setas, teclado e swipe",
+    "Simulador de financiamento pela tabela Price que envia a simulação pelo WhatsApp",
+    "Showroom 3D com o símbolo GS extrudado em pintura automotiva, preparado por trás do preloader",
+    "Formulário de avaliação do usado validado com zod que monta a mensagem e abre o WhatsApp, sem salvar dados"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Hero com a rodovia noturna em WebGL" },
+    { "file": "shot-1.webp", "caption": "Destaques em vitrine horizontal fixada" },
+    { "file": "shot-2.webp", "caption": "Estoque completo com filtros" },
+    { "file": "shot-3.webp", "caption": "Simulador de financiamento" },
+    { "file": "shot-4.webp", "caption": "Showroom 3D com o símbolo GS" },
+    { "file": "mobile-1.webp", "caption": "Hero no celular" },
+    { "file": "mobile-2.webp", "caption": "Destaques no celular" }
+  ],
+  "url": null,
+  "accent": "#CF2720",
+  "notes": "Capturado do dist/ que já existia no projeto (build de 25/09/2026; o commit seguinte só mexe na restauração de rolagem e no vercel.json), servido por serve.mjs na porta 6201. Carros, preços e fotos são o estoque real e público da loja (snapshot em src/data/estoque.json, fotos vindas do WordPress da loja); nada pessoal. Nas capturas escondi via CSS o cursor customizado, a barra de progresso de rolagem e o botão flutuante do WhatsApp. Não achei URL pública da landing no código: vercel.json só tem rewrite e gsmotorsmultimarcas.com é o site WordPress antigo da loja. Repositório: github.com/PedroTrindade05/gs-motors (todos os commits do Pedro). Outras seções que renderam bem e podem virar imagem: serviços em cards empilhados (fundo claro), contato com mapa e o rodapé vermelho com MOTORS gigante."
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "hubib-marketplace",
+  "title": "Hubib Shop",
+  "client": "Hubib",
+  "category": "Plataforma",
+  "type": "Marketplace web · Pontos e cripto",
+  "year": "2026",
+  "roles": ["Front-end", "UI/UX Design"],
+  "stack": ["React", "TypeScript", "Tailwind CSS", "shadcn/ui", "TanStack Query", "i18next"],
+  "tagline": "Pontos e cripto viram compras",
+  "summary": "Loja da Hubib onde o usuário troca Hub Points e saldo da Hubib Wallet por produtos. Abre dentro do app da Hubib e tem telas próprias para desktop e celular.",
+  "overview": "A Hubib Shop é a loja do ecossistema Hubib: roda dentro do app, recebe a sessão do usuário por SSO e já mostra na entrada o saldo de pontos e da carteira. O desafio era deixar simples uma compra que pode ser paga com duas moedas ao mesmo tempo e sair de fornecedores diferentes. O resultado é um checkout em quatro etapas, com frete separado por entrega e uma barra que divide o total entre pontos e cripto. Em volta disso vêm pedidos, devoluções, suporte por tickets e a interface em quatro idiomas.",
+  "highlights": [
+    "Pagamento combinado: uma barra divide o total entre Hub Points e cripto da Hubib Wallet",
+    "Checkout em quatro etapas: endereço, frete, pagamento e confirmação",
+    "Frete cotado por entrega, agrupando os itens de cada fornecedor",
+    "Cupom de desconto aplicado direto no resumo do pedido",
+    "Pedidos com rastreio, cancelamento por entrega e devolução com envio de foto ou vídeo",
+    "Suporte por tickets e interface em português, inglês, espanhol e francês"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Início com saldo de pontos e carteira, banner e mais vendidos" },
+    { "file": "shot-1.webp", "caption": "Categoria com busca, faixa de preço e ordenação" },
+    { "file": "shot-2.webp", "caption": "Página do produto com preço em pontos ou dólar" },
+    { "file": "shot-3.webp", "caption": "Carrinho lateral com quantidades e total" },
+    { "file": "shot-4.webp", "caption": "Checkout dividindo o pagamento entre Hub Points e USDT" },
+    { "file": "mobile-1.webp", "caption": "Início no celular, com atalhos e barra de navegação" },
+    { "file": "mobile-2.webp", "caption": "Produto no celular, com o painel de compra" }
+  ],
+  "url": null,
+  "accent": "#C57A44",
+  "notes": "Rodou com vite dev (config temporário fora do projeto, @vitejs/plugin-react, porta 6404) usando a camada de mock que o próprio projeto já tem (VITE_USE_MOCKS e src/lib/mocks). Nenhuma API real foi chamada e o puppeteer abortou tudo que não fosse localhost (Insider, cdnfonts). Produtos, preços, saldos, endereço e pedidos são os dados de exemplo do repositório. Ajustes só em memória/captura: o usuário do mock (nome e e-mail do Pedro) virou 'Lucas Andrade'; a descrição dos produtos mock trocou 'Item de catálogo de demonstração' por 'Novo, lacrado e com 12 meses de garantia'; dois itens foram adicionados ao carrinho pelo fluxo real. CSS injetado corrigiu os cards de saldo da home: o react-liquid-glass-svg põe position:relative inline e empurra o conteúdo para fora do card no código atual (vale corrigir no projeto). Imagens de produto que já estavam em cache ficavam invisíveis (ImagemDoProduto: o onLoad dispara antes do useEffect([src]) zerar o estado), então forcei opacidade nas já carregadas. Experiências e Viagens aparecem como 'Em breve' no app. Commits vão de out/2025 a set/2026 (a maioria em 2026) e o repositório tem vários autores, então confirme os papéis. URL: o código cita marketplace.hubib.com, mas em produção a loja só abre dentro do app (fora dele mostra um aviso), por isso url null."
+}

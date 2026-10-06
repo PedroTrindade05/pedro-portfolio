@@ -1,0 +1,33 @@
+{
+  "slug": "landing-hubib",
+  "title": "Hubib",
+  "client": "Hubib",
+  "category": "Landing page",
+  "type": "Landing page · Web3",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end", "Motion"],
+  "stack": ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "i18next", "Vite"],
+  "tagline": "O dinheiro sem permissão",
+  "summary": "Landing page da Hubib, super app financeiro que junta carteira cripto, cartões, Academy, Shop e mercado de previsões. Tem página própria dos cartões e uma FAQ com assistente de IA que responde em streaming.",
+  "overview": "A Hubib tem muitos produtos debaixo do mesmo teto, e a landing precisava apresentar tudo isso sem virar um catálogo. A solução foi uma narrativa guiada pelo scroll: o cartão sai do hero, trava no centro da tela e abre a coleção de sete cartões, seguido de um passo a passo, uma pilha de produtos e a seção de previsões. Depois vieram a página Hubib Cards, a versão mobile com componentes próprios, quatro idiomas e uma FAQ completa com busca e o botão Perguntar à IA.",
+  "highlights": [
+    "Cartão que acompanha o scroll do hero até a seção de cartões, onde trava no centro e troca de visual",
+    "Seletor da coleção de sete cartões, do Starter ao Universe, com fundo que muda a cada escolha",
+    "Pilha de produtos (Wallet, Shop, Academy) em que cada cartão sobe e encolhe o anterior conforme o scroll",
+    "FAQ com categorias, busca e botão Perguntar à IA com resposta em streaming e markdown",
+    "Página Hubib Cards com hero próprio, benefícios e coleção em acordeão",
+    "Quatro idiomas (português, inglês, espanhol e francês) e layout mobile dedicado"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Hero com o cartão Universe flutuando sobre o planeta" },
+    { "file": "shot-1.webp", "caption": "Coleção de cartões com o Universe em destaque" },
+    { "file": "shot-2.webp", "caption": "Seção Hubib Prediction com categorias de previsão" },
+    { "file": "shot-3.webp", "caption": "Página Hubib Cards" },
+    { "file": "shot-4.webp", "caption": "FAQ com a IA respondendo em streaming" },
+    { "file": "mobile-1.webp", "caption": "Hero mobile com os produtos girando sobre o globo" },
+    { "file": "mobile-2.webp", "caption": "Perguntar à IA no celular" }
+  ],
+  "url": null,
+  "accent": "#FFB800",
+  "notes": "O dist/ do projeto era de maio e não tinha a IA da FAQ, então gerei um build novo do código atual numa pasta temporária. A IA depende de um proxy local (pasta modelo-ia, com Ollama) que não está no repositório: para a captura usei um servidor mock local que transmite uma resposta montada a partir do texto da própria FAQ, então o conteúdo da resposta é ilustrativo. Na seção de previsões cliquei em Esporte para fugir da foto de artista real usada em Entretenimento. Nenhuma URL pública da landing no código; o botão Entrar leva para app.hubib.com e há link da App Store (id6752864623)."
+}

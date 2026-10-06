@@ -1,0 +1,33 @@
+{
+  "slug": "gsmotors-raspadinha",
+  "title": "Raspadinha Premiada",
+  "client": "GS Motors Multimarcas",
+  "category": "Campanha interativa",
+  "type": "Totem touchscreen · Campanha de prêmios",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end", "Motion Design"],
+  "stack": ["React", "TypeScript", "Tailwind", "Framer Motion", "Web Audio API", "Supabase"],
+  "tagline": "Raspe, concorra e acelere",
+  "summary": "Raspadinha digital para o totem do estande da GS Motors nos feirões: o participante escolhe o perfil, digita o código do estande, nome e WhatsApp e raspa com o dedo uma cartela 3x3 até achar a trinca do prêmio.",
+  "overview": "Feita para rodar em tela cheia num totem touchscreen, com teclados virtuais próprios no lugar do teclado do sistema e um fluxo linear que volta ao início a cada participante. O prêmio e a cartela são decididos no backend (Edge Functions no Supabase), então a tela só revela o que o servidor sorteou e nenhum sorteio acontece no navegador. Para a equipe do estande, um painel em /admin controla o catálogo de prêmios por público, a regra de telefone repetido e o resgate dos brindes.",
+  "highlights": [
+    "Raspagem de verdade em canvas: a folha é apagada ao longo da trilha do dedo e a casa se revela com 40% raspado",
+    "Destaque de quase lá em amarelo quando duas casas iguais aparecem e brilho verde na trinca vencedora",
+    "Som de atrito sintetizado na Web Audio API, com intensidade que acompanha a velocidade do arraste",
+    "Código de acesso de 6 dígitos validado no servidor antes de liberar a cartela",
+    "Teclado QWERTY com acentos por toque longo e teclado numérico com máscara de telefone",
+    "Painel /admin com participações, resgate, exportação CSV e catálogo por público com upload de imagem"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Tela de repouso do totem" },
+    { "file": "shot-1.webp", "caption": "Escolha do perfil do participante" },
+    { "file": "shot-2.webp", "caption": "Cartela sendo raspada, com o destaque de quase lá" },
+    { "file": "shot-3.webp", "caption": "Resultado com o tema dourado de prêmio raro" },
+    { "file": "shot-4.webp", "caption": "Painel admin com o catálogo de prêmios" },
+    { "file": "mobile-1.webp", "caption": "Cartela em tela vertical" },
+    { "file": "mobile-2.webp", "caption": "Painel admin no celular" }
+  ],
+  "url": null,
+  "accent": "#E92027",
+  "notes": "Sem dist no projeto: fiz um vite build na minha pasta temporária (config própria com @vitejs/plugin-react, root apontando para o projeto e um .env falso com host mock), sem escrever nada na pasta do projeto, e servi na porta 6202. Todas as chamadas ao backend (validate-code, play, admin/*, auth) foram interceptadas no puppeteer e respondidas com dados fictícios; nada foi lido nem gravado no Supabase real. Os prêmios do mock vêm do seed antigo do próprio projeto (src/lib/adminMockSeed.ts, removido no commit de integração) e os participantes da lista são nomes fictícios do mesmo seed; a sessão do admin foi injetada no localStorage. A cartela foi raspada simulando arraste do mouse e o prêmio raro do resultado foi escolhido no mock. A integração com o backend real veio de um PR de outro dev (Joao Gabriel Furlan, 4 commits); o resto é do Pedro. Atalho do staff para o /admin: Alt+Shift+G por 3 s. Telas capturáveis que ficaram de fora: código de acesso com teclado numérico, nome e WhatsApp com teclado virtual, confirmação e modal Como jogar."
+}

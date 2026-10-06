@@ -1,0 +1,36 @@
+{
+  "slug": "pdv-card",
+  "title": "W3 Pay PDV",
+  "client": "W3 Build",
+  "category": "Aplicativo",
+  "type": "App mobile · Maquininha cripto",
+  "year": "2026",
+  "roles": ["UI/UX Design", "Front-end", "App mobile"],
+  "stack": ["Expo", "React Native", "TypeScript", "expo-router", "Reanimated", "i18n"],
+  "tagline": "Maquininha que recebe em USDT",
+  "summary": "App de maquininha Android que cobra em USDT: o lojista digita o valor, o app gera o QR e o cliente paga pela carteira.",
+  "overview": "A maquininha Gertec GPOS760 precisava de um PDV que funcionasse no balcão, com tela pequena, teclas físicas e operação rápida. O app guia a venda em poucos passos: valor, rede, QR e comprovante, com PIN para proteger histórico e resumo. O visual segue a marca do lojista, em tema claro e escuro, e a interface fala português, inglês e espanhol.",
+  "highlights": [
+    "Teclado numérico grande para digitar o valor e escolher a moeda",
+    "QR de cobrança com escolha de rede (Polygon, BNB Chain, Ethereum) e contador de validade",
+    "Detecção do pagamento por polling, com tela de aprovado animada e som",
+    "Comprovante impresso na maquininha ou em PDF, com envio por WhatsApp",
+    "Resumo do dia e histórico de vendas protegidos por PIN",
+    "White-label: cor e logo do lojista por tema, claro e escuro",
+    "Idiomas pt-BR, en-US e es-ES"
+  ],
+  "screens": [
+    { "file": "cover.webp", "caption": "Valor, QR de cobrança e pagamento aprovado" },
+    { "file": "comp-1.webp", "caption": "PIN, histórico de vendas e comprovante" },
+    { "file": "comp-2.webp", "caption": "Tema claro e escuro: venda, resumo e histórico" },
+    { "file": "mobile-1.webp", "caption": "Teclado para digitar o valor da venda" },
+    { "file": "mobile-2.webp", "caption": "QR de cobrança aguardando o pagamento" },
+    { "file": "mobile-3.webp", "caption": "Pagamento aprovado e resumo da venda" },
+    { "file": "mobile-4.webp", "caption": "Histórico de vendas no tema claro" },
+    { "file": "mobile-5.webp", "caption": "Resumo do dia com total recebido" },
+    { "file": "mobile-6.webp", "caption": "Acesso protegido por PIN" }
+  ],
+  "url": null,
+  "accent": "#9EE072",
+  "notes": "Roda como app Expo, exportado para web numa cópia temporária (projeto original intocado) com a API do servidor, a HubSwap e os RPCs interceptados no puppeteer: loja 'Mercearia Central', valores em USDT e vendas fictícias, nenhum dado real. Na cópia, react-native-pager-view e expo-battery foram trocados por stubs web. O app exibe a marca 'W3 PAY' (white-label, cor padrão #9EE072); o nome do app no app.json é 'PDV' e o repositório é pdv-card, então usei 'W3 Pay PDV' como título. O git tem commits divididos com outro dev (Gabriel Gonçalves, cerca de 48%); Pedro assina a maior parte das telas e do visual. Não deu para capturar a impressão física nem o PDF (módulos nativos). As telas são do app em viewport 390x844 no Chrome, não de um aparelho real; o PIX está desligado no app, por isso só aparece USDT. Cliente 'W3 Build' inferido do repositório (w3-build) e da marca W3."
+}
