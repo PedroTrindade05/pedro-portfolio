@@ -4,6 +4,7 @@ import { fullscreenTriangle, type Layer, type Rect } from "./stage";
 import { pointer } from "@/lib/pointer";
 import { accentRGB } from "@/lib/accent";
 import { isTouch } from "@/lib/env";
+import { isNear } from "./gate";
 
 type BallDef = { r: number; R: number; a: number; b: number; c: number; p: number; q: number; s: number };
 
@@ -113,7 +114,7 @@ export class ChromeLayer implements Layer {
   rect(): Rect | null {
     if (!this.enabled || this.alpha <= 0.001 || this.appear <= 0.001) return null;
     const el = this.getAnchor();
-    if (!el) return null;
+    if (!el || !isNear(el)) return null;
     const b = el.getBoundingClientRect();
     return { x: b.left, y: b.top, w: b.width, h: b.height };
   }

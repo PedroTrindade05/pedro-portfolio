@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { gsap } from "@/lib/gsap";
 import { stage, type Layer, type Rect } from "./stage";
+import { isNear } from "./gate";
 
 /**
  * Vitrine 3D dos projetos: as capas ficam num trilho circular em perspectiva,
@@ -80,8 +81,10 @@ type Card = {
   mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
   mirror: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
   src: string;
+  full: string;
   aspect: number;
   loaded: boolean;
+  upgraded: boolean;
 };
 
 class Showcase implements Layer {
@@ -91,6 +94,9 @@ class Showcase implements Layer {
   private cards: Card[] = [];
   private loader = new THREE.TextureLoader();
   private el: HTMLElement | null = null;
+  /** posição do palco, lida uma vez por quadro em rect() e reaproveitada */
+  private er = { left: 0, top: 0, width: 1, height: 1 };
+  private upgradeTimer = 0;
   private off: (() => void) | null = null;
   private geo = new THREE.PlaneGeometry(1, 1, 32, 18);
 
@@ -125,7 +131,9 @@ class Showcase implements Layer {
     this.el = el;
   }
 
-  setItems(srcs: string[]) {
+  /** `rails`: capas leves usadas no trilho; `fulls`: capas grandes, carregadas só para o card ativo. */
+  setItems(rails: string[], fulls: string[]) {
+    const srcs = rails;
     if (this.cards.length && this.cards.map((c) => c.src).join() === srcs.join()) return;
     this.cards.forEach((c) => {
       this.scene.remove(c.mesh, c.mirror);
@@ -135,7 +143,7 @@ class Showcase implements Layer {
     });
     const blank = new THREE.DataTexture(new Uint8Array([18, 18, 20, 255]), 1, 1);
     blank.needsUpdate = true;
-    this.cards = srcs.map((src) => {
+    this.cards = srcs.map((src, ci) => {
       const make = (reflect: number) =>
         new THREE.ShaderMaterial({
           vertexShader: vert,
@@ -167,12 +175,12 @@ class Showcase implements Layer {
       const mirror = new THREE.Mesh(this.geo, make(1));
       mesh.frustumCulled = mirror.frustumCulled = false;
       this.scene.add(mirror, mesh);
-      return { mesh, mirror, src, aspect: 1.6, loaded: false };
+      return { mesh, mirror, src, full: fulls[ci], aspect: 1.6, loaded: false, upgraded: false };
     });
   }
 
   /** Carrega as capas a partir do card ativo, para as vizinhas chegarem primeiro. */
-  load() {
+  load(stagger = 250) {
     const n = this.count;
     const order = Array.from({ length: n }, (_, k) => (this.active + (k % 2 ? Math.ceil(k / 2) : -k / 2) + n * 2) % n);
     order.forEach((i, k) => {
@@ -180,18 +188,58 @@ class Showcase implements Layer {
       if (c.loaded) return;
       setTimeout(() => {
         this.loader.load(c.src, (tex) => {
-          tex.colorSpace = THREE.NoColorSpace;
-          tex.minFilter = THREE.LinearMipmapLinearFilter;
-          tex.generateMipmaps = true;
-          tex.anisotropy = 4;
+          this.prepareTexture(tex);
           const img = tex.image as HTMLImageElement;
           c.aspect = img.width / img.height;
-          c.mesh.material.uniforms.uTex.value = tex;
-          c.mirror.material.uniforms.uTex.value = tex;
+          this.setCardTexture(c, tex);
           c.loaded = true;
           gsap.to([c.mesh.material.uniforms.uLoaded, c.mirror.material.uniforms.uLoaded], { value: 1, duration: 0.8 });
         });
-      }, k * 60);
+      }, k * stagger);
+    });
+  }
+
+  private prepareTexture(tex: THREE.Texture) {
+    tex.colorSpace = THREE.NoColorSpace;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.generateMipmaps = true;
+    tex.anisotropy = 4;
+    // envia para a placa de vídeo já, fora do primeiro quadro em que o card aparece
+    stage.renderer?.initTexture(tex);
+  }
+
+  private setCardTexture(c: Card, tex: THREE.Texture) {
+    const old = c.mesh.material.uniforms.uTex.value as THREE.Texture | null;
+    c.mesh.material.uniforms.uTex.value = tex;
+    c.mirror.material.uniforms.uTex.value = tex;
+    if (old && old.image && (old as THREE.Texture & { isDataTexture?: boolean }).isDataTexture !== true && old !== tex) old.dispose();
+  }
+
+  /** Troca a capa leve do card pela grande (usada quando o card vira o ativo ou vai abrir). */
+  upgrade(i: number, timeout = 800) {
+    const c = this.cards[i];
+    if (!c || c.upgraded) return Promise.resolve();
+    c.upgraded = true;
+    return new Promise<void>((res) => {
+      const done = () => res();
+      const t = setTimeout(done, timeout);
+      this.loader.load(
+        c.full,
+        (tex) => {
+          this.prepareTexture(tex);
+          const img = tex.image as HTMLImageElement;
+          c.aspect = img.width / img.height;
+          this.setCardTexture(c, tex);
+          clearTimeout(t);
+          done();
+        },
+        undefined,
+        () => {
+          c.upgraded = false;
+          clearTimeout(t);
+          done();
+        },
+      );
     });
   }
 
@@ -211,7 +259,7 @@ class Showcase implements Layer {
   /** Retângulo (px) que o card ativo ocupa no palco, para o teste de clique. */
   activeRect(): Rect | null {
     if (!this.el) return null;
-    const b = this.el.getBoundingClientRect();
+    const b = this.er;
     const { w, h } = this.cardSize(b.width);
     return { x: b.left + b.width / 2 - w / 2, y: b.top + this.cardTop(b.height, h), w, h };
   }
@@ -228,8 +276,9 @@ class Showcase implements Layer {
   rect(): Rect | null {
     if (this.alpha <= 0.001 || !this.count) return null;
     if (this.expand > 0) return { x: 0, y: 0, w: innerWidth, h: innerHeight };
-    if (!this.el) return null;
-    const b = this.el.getBoundingClientRect();
+    if (!isNear(this.el)) return null;
+    const b = this.el!.getBoundingClientRect();
+    this.er = { left: b.left, top: b.top, width: b.width, height: b.height };
     if (b.bottom < -50 || b.top > innerHeight + 50) return null;
     return { x: 0, y: 0, w: innerWidth, h: innerHeight };
   }
@@ -254,9 +303,15 @@ class Showcase implements Layer {
     if (act !== this.lastActive) {
       this.lastActive = act;
       this.onChange?.(act);
+      clearTimeout(this.upgradeTimer);
+      // só baixa a capa grande para o cache; o envio à placa de vídeo acontece no clique (open)
+      this.upgradeTimer = window.setTimeout(() => {
+        const full = this.cards[act]?.full;
+        if (full) new Image().src = full;
+      }, 400);
     }
 
-    const b = this.el?.getBoundingClientRect() ?? { left: 0, top: 0, width: W, height: H };
+    const b = this.el ? this.er : { left: 0, top: 0, width: W, height: H };
     const { w: cw, h: ch } = this.cardSize(b.width);
     const cyScreen = b.top + this.cardTop(b.height, ch) + ch / 2;
     const cxScreen = b.left + b.width / 2;
@@ -358,7 +413,7 @@ class Showcase implements Layer {
   /** Cresce o card ativo até a tela cheia (para abrir o case sem corte). */
   open() {
     gsap.killTweensOf(this, "expand");
-    return gsap.to(this, { expand: 1, duration: 1, ease: "inOut" }).then();
+    return this.upgrade(this.active).then(() => gsap.to(this, { expand: 1, duration: 1, ease: "inOut" }).then());
   }
 
   /** Some depois que a página do case já mostra a mesma imagem. */

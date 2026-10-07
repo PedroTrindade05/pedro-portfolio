@@ -5,6 +5,8 @@ import { type Rect } from "./stage";
 import { Borromean } from "./borromean";
 import { pointer } from "@/lib/pointer";
 import { isMobile, isTouch } from "@/lib/env";
+import { app } from "@/lib/bus";
+import { stage as glStage } from "./stage";
 
 /**
  * Hero "Trindade": os anéis borromeanos em metal escuro sobre um palco de estúdio.
@@ -74,6 +76,13 @@ export class TrindadeScene extends Scene3D {
   private cycleTimer = 0;
   private cycleIndex = 0;
   private hl = [{ v: 0 }, { v: 0 }, { v: 0 }];
+  /** 1 = modo preloader (anéis no centro, apagados e soltos, montando com o progresso); 0 = hero */
+  pre = 0;
+  private key!: THREE.DirectionalLight;
+  private rim!: THREE.DirectionalLight;
+  private enterT = [{ v: 1 }, { v: 1 }, { v: 1 }];
+  /** pulso de encaixe quando o carregamento chega a 100% */
+  pop = 0;
   onHover: ((i: number) => void) | null = null;
 
   constructor(anchor: () => Element | null) {
@@ -89,6 +98,8 @@ export class TrindadeScene extends Scene3D {
     const rim = new THREE.DirectionalLight(0xe6ecff, 1.4);
     rim.position.set(5, 2, -6);
     this.scene.add(key, rim);
+    this.key = key;
+    this.rim = rim;
 
     this.rings = new Borromean(isMobile() ? "low" : "high");
     this.scene.add(this.rings.group);
@@ -129,6 +140,32 @@ export class TrindadeScene extends Scene3D {
     this.floor.rotation.x = -Math.PI / 2;
     this.floor.frustumCulled = false;
     this.scene.add(this.floor);
+
+    // compila os shaders em paralelo (KHR_parallel_shader_compile): o contador do preloader não congela
+    this.compiled = false;
+    app.sceneWait = true;
+    const warm = (renderer as THREE.WebGLRenderer & { compileAsync?: (s: THREE.Object3D, c: THREE.Camera) => Promise<unknown> }).compileAsync?.(this.scene, this.camera);
+    (warm ?? Promise.resolve()).then(
+      () => this.startEnter(),
+      () => this.startEnter(),
+    );
+  }
+
+  /** Cada anel chega de uma direção, em sequência, com desaceleração longa. */
+  private startEnter() {
+    this.compiled = true;
+    app.sceneWait = false;
+    if (this.pre < 0.5) return;
+    this.enterT.forEach((e, k) => {
+      e.v = 0;
+      gsap.to(e, { v: 1, duration: 2.4, ease: "expo.out", delay: 0.1 + k * 0.28 });
+    });
+  }
+
+  /** Estalo de encaixe quando o carregamento termina. */
+  snap() {
+    gsap.killTweensOf(this, "pop");
+    gsap.timeline().to(this, { pop: 1, duration: 0.22, ease: "power3.out" }).to(this, { pop: 0, duration: 1.1, ease: "elastic.out(1, 0.45)" });
   }
 
   pointerDown(x: number, y: number) {
@@ -159,9 +196,23 @@ export class TrindadeScene extends Scene3D {
 
     // anéis à direita no desktop, no alto no celular
     const base = mobile ? 0.78 : 1.1;
-    const s = base * (0.35 + 0.65 * this.appear) * (1 + this.progress * 0.4);
-    const gx = mobile ? 0 : halfW * 0.4;
-    const gy = (mobile ? halfH * 0.42 : 0.55) + this.progress * 2.2 + Math.sin(time * 0.8) * 0.06;
+    const pre = this.pre;
+    const lp = app.progress;
+    const easeP = 1 - Math.pow(1 - lp, 3);
+    const hs = base * (0.35 + 0.65 * this.appear) * (1 + this.progress * 0.4);
+    // modo preloader: anéis grandes no centro, crescendo e se encaixando com o progresso
+    const fit = mobile ? Math.min(1, (halfW * 0.8) / 1.75) : 1.4;
+    const ps = fit * (0.55 + 0.45 * easeP) * (1 + this.pop * 0.07);
+    const s = hs + (ps - hs) * pre;
+    const hgx = mobile ? 0 : halfW * 0.4;
+    const hgy = (mobile ? halfH * 0.42 : 0.55) + this.progress * 2.2;
+    const gx = hgx * (1 - pre);
+    const gy = hgy + ((mobile ? halfH * 0.08 : 0.1) - hgy) * pre + Math.sin(time * 0.8) * 0.06;
+    const dark = 1 - pre * (0.66 - 0.28 * easeP);
+    this.scene.environmentIntensity = dark;
+    this.key.intensity = 1.8 * dark;
+    this.rim.intensity = 1.4 * dark;
+    for (let k = 0; k < 3; k++) this.rings.enter[k] = pre > 0.01 || this.enterT[k].v < 1 ? this.enterT[k].v : 1;
     this.rings.group.scale.setScalar(s);
     this.rings.group.position.set(gx, gy, 0);
 
@@ -170,7 +221,7 @@ export class TrindadeScene extends Scene3D {
     this.floor.position.y = floorY;
     const fu = this.floor.material.uniforms;
     fu.uTime.value = time;
-    fu.uAppear.value = this.appear;
+    fu.uAppear.value = this.appear * (1 - pre);
     fu.uCenter.value.set(gx, 0, floorY);
     fu.uSideFade.value = mobile ? 0 : 1;
 
@@ -182,12 +233,12 @@ export class TrindadeScene extends Scene3D {
       this.drag.ry += this.drag.vy;
       this.drag.rx *= 0.985;
     }
-    this.auto += dt * (0.22 + (this.hovered >= 0 ? -0.08 : 0));
+    this.auto += dt * (0.22 + (this.hovered >= 0 ? -0.08 : 0) + pre * (1.4 * (1 - easeP) + 0.15));
     const active = pointer.active && !isTouch();
     this.mouse.x += ((active ? pointer.nx : 0) - this.mouse.x) * 0.05;
     this.mouse.y += ((active ? pointer.ny : 0) - this.mouse.y) * 0.05;
     this.rings.spin.rotation.set(
-      0.42 + this.mouse.y * 0.3 + this.drag.rx + Math.sin(time * 0.35) * 0.07,
+      0.42 + this.mouse.y * 0.3 * (1 - pre) + this.drag.rx + Math.sin(time * 0.35) * 0.07,
       this.auto + this.drag.ry + (1 - this.appear) * 2.5,
       -this.mouse.x * 0.14 + Math.sin(time * 0.27) * 0.05,
     );
@@ -201,7 +252,7 @@ export class TrindadeScene extends Scene3D {
 
     // hover: qual anel está sob o cursor; sem hover, o destaque passa sozinho
     let hit = -1;
-    if (active && !this.drag.active && this.appear > 0.9) {
+    if (active && !this.drag.active && this.appear > 0.9 && pre < 0.05) {
       const p = localPointer(pointer.x, pointer.y, rect);
       if (Math.abs(p.x) <= 1 && Math.abs(p.y) <= 1) {
         this.raycaster.setFromCamera(new THREE.Vector2(p.x, p.y), this.camera);
@@ -217,15 +268,21 @@ export class TrindadeScene extends Scene3D {
       }
       hit = this.appear > 0.9 ? this.cycleIndex : -1;
     }
-    if (hit !== this.hovered) {
+    if (pre < 0.05 && hit !== this.hovered) {
       this.hovered = hit;
       this.setHighlight(hit);
       this.onHover?.(hit);
     }
     for (let k = 0; k < 3; k++) this.rings.highlight[k] = this.hl[k].v;
+    if (pre > 0.01) {
+      // apagados no começo, acesos no fim; soltos no começo, encaixados no fim
+      this.rings.focus = Math.max(this.rings.focus, pre * (1 - easeP));
+      this.rings.spread = pre * ((1 - easeP) * 2.6 + this.pop * 0.5);
+    }
     this.rings.apply();
 
     // espelho: mesma pose, invertida em relação ao chão, com o material sincronizado
+    this.mirror.visible = glStage.quality >= 0.75 && pre < 0.99;
     this.mirror.position.set(gx, 2 * floorY - gy, 0);
     this.mirror.scale.set(s, -s, s);
     this.mirror.rotation.copy(this.rings.spin.rotation);
@@ -235,13 +292,14 @@ export class TrindadeScene extends Scene3D {
       dst.color.copy(src.color);
       dst.roughness = src.roughness;
       dst.envMapIntensity = src.envMapIntensity;
-      dst.opacity = 0.2 * this.appear;
+      dst.opacity = 0.2 * this.appear * (1 - pre);
     });
 
-    this.camera.lookAt(mobile ? 0 : halfW * 0.08, 0.2, 0);
+    this.camera.lookAt((mobile ? 0 : halfW * 0.08) * (1 - pre), 0.2, 0);
   }
 
   dispose() {
+    app.sceneWait = false;
     this.rings?.dispose();
     this.mirrorMeshes.forEach((m) => (m.material as THREE.Material).dispose());
     super.dispose();

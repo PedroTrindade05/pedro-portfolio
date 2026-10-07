@@ -25,6 +25,9 @@ class EllipseCurve3 extends THREE.Curve<THREE.Vector3> {
 
 /** Direção em que cada anel se afasta quando os três se soltam. */
 const AXES = [new THREE.Vector3(0, 0, 1), new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0)];
+/** Direção de onde cada anel voa na entrada: de frente, da esquerda, de cima. */
+const FLY = [new THREE.Vector3(0.35, 0.2, 1), new THREE.Vector3(-1, -0.15, 0.2), new THREE.Vector3(0.25, 1, -0.2)].map((v) => v.normalize());
+const qSpin = new THREE.Quaternion();
 // metal escuro (grafite escovado); o anel em destaque clareia para aço
 const BASE = new THREE.Color("#5b5f66");
 const LIT = new THREE.Color("#b9bdc4");
@@ -42,11 +45,13 @@ export class Borromean {
   focus = 0;
   /** separação dos anéis */
   spread = 0;
+  /** entrada de cada anel (0 = longe e girando, 1 = no lugar) */
+  enter = [1, 1, 1];
 
   constructor(quality: "high" | "low" = "high") {
     const a = 1.62, b = 1.0, r = 0.13;
-    const tubular = quality === "high" ? 420 : 220;
-    const radial = quality === "high" ? 48 : 24;
+    const tubular = quality === "high" ? 260 : 150;
+    const radial = quality === "high" ? 32 : 16;
     const proxyMat = new THREE.MeshBasicMaterial({ visible: false });
     for (let i = 0; i < 3; i++) {
       const curve = new EllipseCurve3(a, b, i);
@@ -77,7 +82,10 @@ export class Borromean {
     const dirs = [1, -1, 1];
     const spread = this.spread * 1.25;
     for (let k = 0; k < 3; k++) {
-      this.holders[k].position.copy(AXES[k]).multiplyScalar(spread * dirs[k]);
+      const away = 1 - this.enter[k];
+      this.holders[k].position.copy(AXES[k]).multiplyScalar(spread * dirs[k]).addScaledVector(FLY[k], away * 10);
+      // gira no próprio plano enquanto chega, desacelerando
+      this.holders[k].quaternion.copy(qSpin.setFromAxisAngle(AXES[k], away * away * Math.PI * 2.4 * (k % 2 ? -1 : 1)));
       const h = this.highlight[k];
       const m = this.materials[k];
       m.color.copy(BASE).lerp(DIM, this.focus * (1 - h) * 0.8).lerp(LIT, h * 0.75);

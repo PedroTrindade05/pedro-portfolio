@@ -49,7 +49,8 @@ class Stage {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        // em telas de alta densidade (ou celular) o serrilhado já não aparece e o MSAA custa caro
+        antialias: window.devicePixelRatio < 1.5 && !isMobile(),
         premultipliedAlpha: true,
         powerPreference: "high-performance",
         stencil: false,

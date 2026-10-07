@@ -293,3 +293,9 @@ html.is-locked {
     transform: none;
   }
 }
+
+@keyframes dialspin {
+  to {
+    transform: rotate(360deg);
+  }
+}

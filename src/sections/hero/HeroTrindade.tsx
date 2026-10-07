@@ -8,6 +8,7 @@ import { TrindadeScene } from "@/gl/heroTrindade";
 import { isMobile, isTouch, reducedMotion } from "@/lib/env";
 import { fitText } from "@/lib/fit";
 import { pointer } from "@/lib/pointer";
+import { app, bus } from "@/lib/bus";
 import { Btn } from "@/components/ui";
 import { HeroMeta, HeroFoot, heroIntro } from "./shared";
 
@@ -23,12 +24,19 @@ export function HeroTrindade() {
 
   const root = useGsap<HTMLElement>((el) => {
     const scene = new TrindadeScene(() => glRef.current);
+    // primeira visita: os anéis já nascem no centro, como o preloader; ao voltar para a home, entram sozinhos
+    const loading = !app.ready;
+    scene.appear = loading ? 1 : 0.02;
+    scene.pre = loading ? 1 : 0;
     const off = stage.add(scene);
+    const offSnap = bus.on("preload:done", () => scene.snap());
 
     const offFit = fitText(nameRef.current!, nameInner.current!, () => (isMobile() ? window.innerWidth - 32 : window.innerWidth * 0.4));
 
     const intro = heroIntro(el, (tl) => {
-      tl.to(scene, { appear: 1, duration: reducedMotion() ? 0.01 : 2.4, ease: "expo.out" }, 0);
+      // os anéis do preloader voam do centro para a posição do hero
+      if (loading) tl.to(scene, { pre: 0, duration: reducedMotion() ? 0.01 : 1.9, ease: "expo.inOut" }, 0);
+      else tl.to(scene, { appear: 1, duration: reducedMotion() ? 0.01 : 2.4, ease: "expo.out" }, 0);
       tl.fromTo(spotRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 2 }, 0.2);
     });
     const offReady = onReady(intro.start);
@@ -50,7 +58,7 @@ export function HeroTrindade() {
     const sx = gsap.quickTo(spot, "x", { duration: 1.6, ease: "power3.out" });
     const sy = gsap.quickTo(spot, "y", { duration: 1.6, ease: "power3.out" });
     const follow = () => {
-      if (isTouch()) return;
+      if (isTouch() || window.scrollY > window.innerHeight * 1.1) return;
       sx(pointer.nx * window.innerWidth * 0.18);
       sy(-pointer.ny * window.innerHeight * 0.14);
     };
@@ -65,6 +73,7 @@ export function HeroTrindade() {
 
     return () => {
       offReady();
+      offSnap();
       intro.cleanup();
       offFit();
       st.kill();

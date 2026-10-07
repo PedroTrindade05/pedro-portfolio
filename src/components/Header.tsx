@@ -8,6 +8,7 @@ import { Btn, Roll } from "./ui";
 import { useGo } from "./Transition";
 import { Clock } from "./Clock";
 import { Monogram } from "./Monogram";
+import { useReady } from "@/lib/hooks";
 
 /**
  * Cabeçalho fixo: troca de cor conforme a seção por baixo (clara/escura),
@@ -20,6 +21,7 @@ export function Header() {
   const [active, setActive] = useState("");
   const location = useLocation();
   const go = useGo();
+  const ready = useReady();
 
   // tema conforme a seção sob o cabeçalho + seção ativa
   useEffect(() => {
@@ -93,7 +95,8 @@ export function Header() {
       <header
         ref={ref}
         className={clsx(
-          "wrap fixed inset-x-0 top-0 z-50 flex h-[var(--header-h)] items-center justify-between transition-colors duration-500",
+          "wrap fixed inset-x-0 top-0 z-50 flex h-[var(--header-h)] items-center justify-between transition-[color,opacity] duration-700",
+          ready ? "opacity-100" : "pointer-events-none opacity-0",
           light && !open ? "text-ink" : "text-paper",
         )}
         style={{ ["--fg" as string]: light && !open ? "#0a0a0b" : "#efefec", ["--bg" as string]: light && !open ? "#efefec" : "#0a0a0b" }}

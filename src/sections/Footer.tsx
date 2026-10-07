@@ -21,7 +21,6 @@ export function Footer() {
     });
     if (!reducedMotion()) {
       gsap.fromTo(inner.current, { yPercent: 60 }, { yPercent: 0, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom bottom", scrub: true } });
-      gsap.to(inner.current, { backgroundPosition: "100% 0%", ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom bottom", scrub: true } });
     }
     return off;
   });
@@ -65,7 +64,7 @@ export function Footer() {
       <p ref={word} className="display wrap mt-16 leading-[0.78]" aria-hidden>
         <span
           ref={inner}
-          className="inline-block whitespace-nowrap pb-[0.06em]"
+          className="inline-block whitespace-nowrap pb-[0.06em] will-change-transform"
           style={{
             background: "linear-gradient(100deg,#5e6269 0%,#f5f6f8 20%,#a7acb4 36%,#eceef1 52%,#7d828a 68%,#fafbfc 84%,#8d9299 100%)",
             backgroundSize: "220% 100%",

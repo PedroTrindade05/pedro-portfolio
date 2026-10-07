@@ -37,7 +37,7 @@ uniform vec4 uBound;      // esfera envolvente (xyz, raio)
 uniform float uAlpha;
 uniform float uEnvRot;
 
-#define MAX_STEPS 72
+#define MAX_STEPS 56
 
 float smin(float a, float b, float k) {
   float h = max(k - abs(a - b), 0.0) / k;

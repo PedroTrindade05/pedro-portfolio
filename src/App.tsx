@@ -9,6 +9,7 @@ import { Header } from "@/components/Header";
 import { Cursor } from "@/components/Cursor";
 import { Preloader } from "@/components/Preloader";
 import { PortalTransition } from "@/components/PortalTransition";
+import { BackToTop } from "@/components/BackToTop";
 import { projects } from "@/content/work";
 import { profile } from "@/content/site";
 import Home from "@/pages/Home";
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="*" element={<Home />} />
         </Routes>
       </Suspense>
+      <BackToTop />
       <PortalTransition />
       <Preloader assets={critical} />
       <Cursor />

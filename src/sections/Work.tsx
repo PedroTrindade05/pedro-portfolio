@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { projects, type Project } from "@/content/work";
 import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
-import { useGsap } from "@/lib/hooks";
+import { useGsap, onReady } from "@/lib/hooks";
 import { revealLines } from "@/lib/reveal";
 import { reducedMotion } from "@/lib/env";
 import { lockScroll } from "@/lib/scroll";
@@ -33,11 +33,17 @@ export function Work() {
   useEffect(() => {
     if (!gl) return;
     showcase.attach();
-    showcase.setItems(projects.map((x) => x.cover));
+    showcase.setItems(projects.map((x) => x.rail), projects.map((x) => x.cover));
     showcase.bind(stageRef.current);
     showcase.onChange = (i) => setActive(i);
-    showcase.load();
+    // as texturas sobem para a placa de vídeo aos poucos, no tempo ocioso depois da abertura do site
+    let timer = 0;
+    const offReady = onReady(() => {
+      timer = window.setTimeout(() => showcase.load(250), 2500);
+    });
     return () => {
+      offReady();
+      clearTimeout(timer);
       showcase.onChange = null;
       showcase.bind(null);
     };

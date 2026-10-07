@@ -18,5 +18,8 @@ export const bus = {
 /** Estado global simples (lido por loops de animação sem re-render). */
 export const app = {
   ready: false, // preloader terminou
+  /** a cena 3D do hero ainda está compilando: o contador do preloader espera por ela */
+  sceneWait: false,
+  progress: 0, // progresso real do carregamento (0..1), lido pela cena 3D do preloader
   route: "/",
 };

@@ -26,6 +26,8 @@ export type Project = {
   highlights: string[];
   cover: string;
   thumb: string;
+  /** versão média da capa, usada na vitrine 3D */
+  rail: string;
   shots: Shot[];
   url: string | null;
   /** cor da marca do projeto (detalhes na página do case) */
@@ -35,13 +37,14 @@ export type Project = {
 type Screen = [file: string, caption: string];
 
 /** Monta caminhos e separa telas desktop e mobile a partir dos nomes dos arquivos. */
-function build(p: Omit<Project, "cover" | "thumb" | "shots"> & { screens: Screen[] }): Project {
+function build(p: Omit<Project, "cover" | "thumb" | "rail" | "shots"> & { screens: Screen[] }): Project {
   const base = `/work/${p.slug}`;
   const { screens, ...rest } = p;
   return {
     ...rest,
     cover: `${base}/cover.webp`,
     thumb: `${base}/thumb.webp`,
+    rail: `${base}/rail.webp`,
     shots: screens.map(([file, caption]) => ({
       src: `${base}/${file}`,
       caption,

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { type Layer, type Rect } from "./stage";
+import { isNear } from "./gate";
 
 let envTex: THREE.Texture | null = null;
 
@@ -30,6 +31,8 @@ export abstract class Scene3D implements Layer {
   enabled = true;
   protected el: () => Element | null;
   protected ready = false;
+  /** false enquanto os shaders compilam em paralelo (a cena não desenha, mas a página não trava) */
+  protected compiled = true;
   /** origem e tamanho da vista em px do dispositivo (para efeitos em espaço de tela) */
   vp = new THREE.Vector4();
 
@@ -40,7 +43,7 @@ export abstract class Scene3D implements Layer {
   rect(): Rect | null {
     if (!this.enabled || this.appear <= 0.001) return null;
     const el = this.el();
-    if (!el) return null;
+    if (!el || !isNear(el)) return null;
     const b = el.getBoundingClientRect();
     return { x: b.left, y: b.top, w: b.width, h: b.height };
   }
@@ -59,6 +62,7 @@ export abstract class Scene3D implements Layer {
     this.camera.aspect = rect.w / rect.h;
     this.camera.updateProjectionMatrix();
     this.update(dt, time, rect);
+    if (!this.compiled) return;
     renderer.clearDepth();
     renderer.render(this.scene, this.camera);
   }

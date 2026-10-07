@@ -47,7 +47,7 @@ function buildTiles(): Tile[] {
 }
 
 const ratioOf = (f: Piece["format"]) => (f === "story" ? "aspect-[9/16]" : f === "page" ? "aspect-[2000/2982]" : "aspect-[4/5]");
-const PAGE = 16;
+const PAGE = 12;
 const heightOf = (f: Piece["format"]) => (f === "story" ? 1.78 : f === "page" ? 1.49 : 1.25);
 
 /** Distribui as peças pela coluna mais curta, mantendo a ordem de leitura da esquerda para a direita. */
